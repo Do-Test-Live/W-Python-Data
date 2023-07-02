@@ -8,11 +8,6 @@ $date = date('Y-m-d');
 
 if (isset($_GET['page_no'])) {
     $page_no = $db_handle->checkValue($_GET['page_no']);
-    $sl = $db_handle->checkValue($_GET['sl']);
-    $horse_name = $db_handle->checkValue($_GET['horse_name']);
-    $win = $db_handle->checkValue($_GET['win']);
-    $place = $db_handle->checkValue($_GET['place']);
-
     $rows = $db_handle->checkValue($_GET['rows']);
 
     $query = "SELECT * FROM `page` where page_no='$page_no' and date ='$date'";
@@ -33,19 +28,8 @@ if (isset($_GET['page_no'])) {
         $page_id=$page[0]['id'];
     }
 
+    $delete = $db_handle->insertQuery("DELETE FROM `page` WHERE id='$page_id'");
 
     $delete = $db_handle->insertQuery("DELETE FROM `racevalue` WHERE date ='$date' and page_id='$page_id' and sl>='$rows'");
-
-    $query = "SELECT * FROM `racevalue` where page_id='$page_id' and date ='$date' and sl='$sl'";
-
-    $page = $db_handle->runQuery($query);
-    $row = $db_handle->numRows($query);
-
-    if($row>0){
-        $update=$db_handle->insertQuery("UPDATE `racevalue` SET `horse_name`='$horse_name',`win`='$win',`place`='$place',`updated_at`='$inserted_at' WHERE page_id='$page_id' and date ='$date' and sl='$sl'");
-        echo 'Update';
-    }else{
-        $insert = $db_handle->insertQuery("INSERT INTO `racevalue`(`date`, `page_id`, `sl`, `horse_name`, `win`, `place`, `inserted_at`) VALUES ('$date','$page_id','$sl','$horse_name','$win','$place','$inserted_at')");
-        echo 'Insert';
-    }
+    echo 'Delete';
 }

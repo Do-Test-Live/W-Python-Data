@@ -29,7 +29,7 @@ $date = date('Y-m-d');
             ?>
             <div class="col-lg-4">
                 <h4>
-                    Page No <?php echo $page[$i]['page_no']; ?>
+                    頁碼 <?php echo $page[$i]['page_no']; ?>
                 </h4>
                 <div class="table-responsive">
                     <table class="table table-success table-striped table-bordered table-hover">
@@ -39,24 +39,24 @@ $date = date('Y-m-d');
 
                             </th>
                             <th colspan="2">
-                                QIN
+                                連贏
                             </th>
                             <th colspan="2">
-                                QPL
+                                位置Q
                             </th>
                             <th colspan="2">
-                                QQP
+                                連贏及位置Q
                             </th>
                         </tr>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Horse Name</th>
-                            <th scope="col">Win</th>
-                            <th scope="col">Place</th>
-                            <th scope="col">Win</th>
-                            <th scope="col">Place</th>
-                            <th scope="col">Win</th>
-                            <th scope="col">Place</th>
+                            <th scope="col">馬名</th>
+                            <th scope="col">獨贏</th>
+                            <th scope="col">位置</th>
+                            <th scope="col">獨贏</th>
+                            <th scope="col">位置</th>
+                            <th scope="col">獨贏</th>
+                            <th scope="col">位置</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -66,7 +66,7 @@ $date = date('Y-m-d');
                         $data_query = "SELECT * FROM `racevalue` where page_id='$page_id' and date ='$date' order by sl asc";
 
                         $data = $db_handle->runQuery($data_query);
-                        $row_count = $db_handle->numRows($query);
+                        $row_count = $db_handle->numRows($data_query);
                         for ($j = 0; $j < $row_count; $j++) {
                             ?>
                             <tr>
