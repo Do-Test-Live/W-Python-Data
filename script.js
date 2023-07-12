@@ -8,8 +8,8 @@ $(document).ready(function () {
             dataType: 'json',
             success: function (response) {
                 if (response.status == 'success') {
-                    var rows = response.data;
-                    var html = '';
+                    let rows = response.data;
+                    let html = '';
 
                     for (var i = 0; i < rows.length; i++) {
                         html += '<tr>';
@@ -31,8 +31,8 @@ $(document).ready(function () {
 
     // Update the row data using Ajax on input change
     $(document).on('input', '[data-name="new_win"], [data-name="new_place"]', function () {
-        var row = $(this).closest('tr');
-        var rowData = {
+        let row = $(this).closest('tr');
+        let rowData = {
             id: row.find('[data-name="new_win"]').data('id'),
             new_win: row.find('[data-name="new_win"]').text(),
             new_place: row.find('[data-name="new_place"]').text(),
