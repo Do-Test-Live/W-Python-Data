@@ -68,16 +68,12 @@ foreach ($rows as $row) {
 
 foreach ($smallestValuesWin as &$values) {
     sort($values);
-
-    echo print_r($values).'<br/>';
 }
 
-echo 'Win: <br/>';
 // Find the smallest values for each page number
-foreach ($smallestValuesWin as $pageNumber => $values) {
+foreach ($smallestValuesWin as $pageNumber => &$values) {
 
     $values=array_values(array_unique($values));
-    echo print_r($values).'<br/>';
 
     if (count($values) >= 1) {
         $smallestValuesPerPageWin[$pageNumber]['first'] = $values[0];
@@ -91,7 +87,7 @@ foreach ($smallestValuesWin as $pageNumber => $values) {
 
 }
 
-echo '<br/><br/><br/><br/>';
+
 $smallestValuesPlace = array();
 
 foreach ($rows as $row) {
@@ -110,15 +106,13 @@ foreach ($rows as $row) {
 
 foreach ($smallestValuesPlace as &$values) {
     sort($values);
-    echo print_r($values).'<br/>';
 }
 
 $smallestValuesPerPagePlace = array();
-echo 'Place: <br/>';
-foreach ($smallestValuesPlace as $pageNumber => $values) {
+
+foreach ($smallestValuesPlace as $pageNumber => &$values) {
 
     $values=array_values(array_unique($values));
-    echo print_r($values).'<br/>';
 
     if (count($values) >= 1) {
         $smallestValuesPerPagePlace[$pageNumber]['first'] = $values[0];
@@ -149,7 +143,7 @@ foreach ($smallestValuesPlace as $pageNumber => $values) {
             <th>獨贏</th>
             <th>位置</th>
             <th>獨贏</th>
-            <th>頁碼</th>
+            <th>場次</th>
             <th>馬名</th>
             <th>獨贏</th>
             <th>位置</th>
