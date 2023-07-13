@@ -43,7 +43,7 @@ if ($action === 'fetch') {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Editable Table</title>
+    <title>HKJC</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
 </head>
 <body>
