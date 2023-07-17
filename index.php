@@ -73,7 +73,7 @@ foreach ($smallestValuesWin as &$values) {
 // Find the smallest values for each page number
 foreach ($smallestValuesWin as $pageNumber => &$values) {
 
-    $values=array_values(array_unique($values));
+    $values = array_values(array_unique($values));
 
     if (count($values) >= 1) {
         $smallestValuesPerPageWin[$pageNumber]['first'] = $values[0];
@@ -112,7 +112,7 @@ $smallestValuesPerPagePlace = array();
 
 foreach ($smallestValuesPlace as $pageNumber => &$values) {
 
-    $values=array_values(array_unique($values));
+    $values = array_values(array_unique($values));
 
     if (count($values) >= 1) {
         $smallestValuesPerPagePlace[$pageNumber]['first'] = $values[0];
@@ -157,47 +157,41 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
         <?php
         foreach ($rows as $row):
 
-            $winClass='';
-            $placeClass='';
+            $winClass = '';
+            $placeClass = '';
 
             foreach ($smallestValuesPerPageWin as $pageNumber => $values) {
-                if($row['page_no']==$pageNumber){
-                    if($values['first']==$row['win']){
-                        $winClass=' class="bg-danger"';
-                    }else if($values['second']==$row['win']){
-                        $winClass=' class="bg-success"';
-                    }else if($values['third']==$row['win']){
-                        $winClass=' class="bg-warning"';
+                if ($row['page_no'] == $pageNumber) {
+                    if ($values['first'] == $row['win']) {
+                        $winClass = ' class="bg-danger"';
+                    } else if ($values['second'] == $row['win']) {
+                        $winClass = ' class="bg-success"';
+                    } else if ($values['third'] == $row['win']) {
+                        $winClass = ' class="bg-warning"';
                     }
                 }
             }
 
             foreach ($smallestValuesPerPagePlace as $pageNumber => $values) {
-                if($row['page_no']==$pageNumber){
-                    if($values['first']==$row['place']){
-                        $placeClass=' class="bg-danger"';
-                    }else if($values['second']==$row['place']){
-                        $placeClass=' class="bg-success"';
-                    }else if($values['third']==$row['place']){
-                        $placeClass=' class="bg-warning"';
+                if ($row['page_no'] == $pageNumber) {
+                    if ($values['first'] == $row['place']) {
+                        $placeClass = ' class="bg-danger"';
+                    } else if ($values['second'] == $row['place']) {
+                        $placeClass = ' class="bg-success"';
+                    } else if ($values['third'] == $row['place']) {
+                        $placeClass = ' class="bg-warning"';
                     }
                 }
             }
 
             ?>
             <tr>
-                <td contenteditable="true" data-name="new_win_1"
-                    data-id="<?php echo $row['id']; ?>"><?php echo $row['new_win_1']; ?></td>
-                <td contenteditable="true" data-name="new_place_1"
-                    data-id="<?php echo $row['id']; ?>"><?php echo $row['new_place_1']; ?></td>
-                <td contenteditable="true" data-name="new_win_2"
-                    data-id="<?php echo $row['id']; ?>"><?php echo $row['new_win_2']; ?></td>
-                <td contenteditable="true" data-name="new_place_2"
-                    data-id="<?php echo $row['id']; ?>"><?php echo $row['new_place_2']; ?></td>
-                <td contenteditable="true" data-name="new_win_3"
-                    data-id="<?php echo $row['id']; ?>"><?php echo $row['new_win_3']; ?></td>
-                <td contenteditable="true" data-name="new_place_3"
-                    data-id="<?php echo $row['id']; ?>"><?php echo $row['new_place_3']; ?></td>
+                <td class="col-0-page-<?php echo $row['page_no']; ?>-value-<?php echo str_replace(".", "-", $row['new_win_1']); ?>" contenteditable="true" data-name="new_win_1" data-id="<?php echo $row['id']; ?>"><?php echo $row['new_win_1']; ?></td>
+                <td class="col-1-page-<?php echo $row['page_no']; ?>-value-<?php echo str_replace(".", "-", $row['new_place_1']); ?>" contenteditable="true" data-name="new_place_1" data-id="<?php echo $row['id']; ?>"><?php echo $row['new_place_1']; ?></td>
+                <td class="col-2-page-<?php echo $row['page_no']; ?>-value-<?php echo str_replace(".", "-", $row['new_win_2']); ?>" contenteditable="true" data-name="new_win_2" data-id="<?php echo $row['id']; ?>"><?php echo $row['new_win_2']; ?></td>
+                <td class="col-3-page-<?php echo $row['page_no']; ?>-value-<?php echo str_replace(".", "-", $row['new_place_2']); ?>" contenteditable="true" data-name="new_place_2" data-id="<?php echo $row['id']; ?>"><?php echo $row['new_place_2']; ?></td>
+                <td class="col-4-page-<?php echo $row['page_no']; ?>-value-<?php echo str_replace(".", "-", $row['new_win_3']); ?>" contenteditable="true" data-name="new_win_3" data-id="<?php echo $row['id']; ?>"><?php echo $row['new_win_3']; ?></td>
+                <td class="col-5-page-<?php echo $row['page_no']; ?>-value-<?php echo str_replace(".", "-", $row['new_place_3']); ?>" contenteditable="true" data-name="new_place_3" data-id="<?php echo $row['id']; ?>"><?php echo $row['new_place_3']; ?></td>
                 <td><?php echo $row['page_no']; ?></td>
                 <td><?php echo $row['horse_name']; ?></td>
                 <td<?php echo $winClass; ?>><?php echo number_format((float)$row['win'], 1, '.', ''); ?></td>
@@ -211,7 +205,6 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
         </tbody>
     </table>
 </div>
-
 
 
 <script src="assets/vendor/jQuery/jquery-3.6.4.min.js"></script>
@@ -304,6 +297,120 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
         // Load table data on page load
         loadTableData();
     });
+
+
+    $(document).ready(function () {
+        setInterval(function () {
+            let uniqueValues = [];
+            let minimumValues = {};
+            let minimumValuesSecond = {};
+            let minimumValuesThird = {};
+
+            // Iterate through each row in the table body
+            $('#editableTable tbody tr').each(function () {
+                let arrayValue = parseInt($(this).find('td').eq(6).text(), 10);
+
+                // Check if the array value is a number and not NaN
+                if (!isNaN(arrayValue)) {
+                    // Check if the array value is already added to uniqueValues array
+                    if (!uniqueValues.includes(arrayValue)) {
+                        uniqueValues.push(arrayValue);
+                        minimumValues[arrayValue] = [];
+                        minimumValuesSecond[arrayValue] = [];
+                        minimumValuesThird[arrayValue] = [];
+
+                        // Iterate through each column index (0 to 5)
+                        for (let columnIndex = 0; columnIndex < 6; columnIndex++) {
+                            let cellValue = parseFloat($(this).find('td').eq(columnIndex).text());
+
+                            // Check if the cell value is a number and not NaN, and not equal to zero
+                            if (!isNaN(cellValue) && cellValue !== 0) {
+                                minimumValues[arrayValue].push(cellValue);
+                                minimumValuesSecond[arrayValue].push(cellValue);
+                                minimumValuesThird[arrayValue].push(cellValue);
+                            }
+                        }
+                    } else {
+                        // Iterate through each column index (0 to 5)
+                        for (let columnIndex = 0; columnIndex < 6; columnIndex++) {
+                            let cellValue = parseFloat($(this).find('td').eq(columnIndex).text());
+
+                            // Check if the cell value is a number and not NaN, and not equal to zero
+                            if (!isNaN(cellValue) && cellValue !== 0) {
+                                // Check if the cell value is smaller than the existing minimum value for the same array value and column index
+                                if (cellValue < minimumValues[arrayValue][columnIndex]) {
+                                    minimumValuesThird[arrayValue][columnIndex] = minimumValuesSecond[arrayValue][columnIndex];
+                                    minimumValuesSecond[arrayValue][columnIndex] = minimumValues[arrayValue][columnIndex];
+                                    minimumValues[arrayValue][columnIndex] = cellValue;
+                                } else if (cellValue < minimumValuesSecond[arrayValue][columnIndex] && cellValue !== minimumValues[arrayValue][columnIndex]) {
+                                    minimumValuesThird[arrayValue][columnIndex] = minimumValuesSecond[arrayValue][columnIndex];
+                                    minimumValuesSecond[arrayValue][columnIndex] = cellValue;
+                                } else if (cellValue < minimumValuesThird[arrayValue][columnIndex] && cellValue !== minimumValues[arrayValue][columnIndex] && cellValue !== minimumValuesSecond[arrayValue][columnIndex]) {
+                                    minimumValuesThird[arrayValue][columnIndex] = cellValue;
+                                } else if (minimumValuesThird[arrayValue][columnIndex] === minimumValuesSecond[arrayValue][columnIndex] && minimumValuesSecond[arrayValue][columnIndex] === minimumValues[arrayValue][columnIndex]) {
+                                    // Update the third smallest value if it is the same as the second and first smallest values
+                                    minimumValuesThird[arrayValue][columnIndex] = cellValue;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+
+            // Output the minimum values for each unique array value
+            for (let value in minimumValues) {
+                for (let columnIndex = 0; columnIndex < 6; columnIndex++) {
+                    let className = `col-${columnIndex}-page-${value}-value-${parseFloat(minimumValues[value][columnIndex]).toFixed(2)}`.replace(/\./g, '-');
+
+                    let elements = document.querySelectorAll('.' + className);
+
+                    // Change the background color of the elements
+                    elements.forEach((element) => {
+                        element.style.backgroundColor = '#dc3545';
+                    });
+                }
+            }
+
+            // Output the second smallest values for each unique array value
+            for (let value in minimumValuesSecond) {
+                for (let columnIndex = 0; columnIndex < 6; columnIndex++) {
+                    let className = `col-${columnIndex}-page-${value}-value-${parseFloat(minimumValuesSecond[value][columnIndex]).toFixed(2)}`.replace(/\./g, '-');
+
+                    let elements = document.querySelectorAll('.' + className);
+
+                    // Change the background color of the elements
+                    elements.forEach((element) => {
+                        element.style.backgroundColor = '#198754';
+                    });
+                }
+            }
+
+            // Output the third smallest values for each unique array value
+            for (let value in minimumValuesThird) {
+                for (let columnIndex = 0; columnIndex < 6; columnIndex++) {
+                    let className = `col-${columnIndex}-page-${value}-value-${parseFloat(minimumValuesThird[value][columnIndex]).toFixed(2)}`.replace(/\./g, '-');
+
+                    let elements = document.querySelectorAll('.' + className);
+
+                    // Change the background color of the elements
+                    elements.forEach((element) => {
+                        element.style.backgroundColor = '#ffc107';
+                    });
+                }
+            }
+
+
+
+            console.log(minimumValues);
+            // Output the second smallest values for each unique array value
+            console.log(minimumValuesSecond);
+            // Output the third smallest values for each unique array value
+            console.log(minimumValuesThird);
+
+        }, 1000); // 1000 milliseconds = 1 second
+    });
+
 
 </script>
 
