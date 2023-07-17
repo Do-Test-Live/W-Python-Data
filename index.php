@@ -357,6 +357,8 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
                 }
             });
 
+            // Reset the background color of all cells to white
+            $('#editableTable td').css('background-color', '#ffffff');
 
             // Output the minimum values for each unique array value
             for (let value in minimumValues) {
@@ -400,16 +402,24 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
                 }
             }
 
+            // Output the minimum values for each unique array value
+            for (let value in minimumValues) {
+                console.log(`Minimum values for ${value}: ${minimumValues[value].join(", ")}`);
+            }
 
-
-            console.log(minimumValues);
             // Output the second smallest values for each unique array value
-            console.log(minimumValuesSecond);
-            // Output the third smallest values for each unique array value
-            console.log(minimumValuesThird);
+            for (let value in minimumValuesSecond) {
+                console.log(`Second smallest values for ${value}: ${minimumValuesSecond[value].join(", ")}`);
+            }
 
+            // Output the third smallest values for each unique array value
+            for (let value in minimumValuesThird) {
+                console.log(`Third smallest values for ${value}: ${minimumValuesThird[value].join(", ")}`);
+            }
         }, 1000); // 1000 milliseconds = 1 second
     });
+
+
 
 
 </script>
