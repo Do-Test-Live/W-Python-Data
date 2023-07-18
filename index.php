@@ -302,55 +302,41 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
     $(document).ready(function () {
         setInterval(function () {
             let uniqueValues = [];
-            let minimumValues = {};
-            let minimumValuesSecond = {};
-            let minimumValuesThird = {};
+            let combinedValues = [];
 
             // Iterate through each row in the table body
             $('#editableTable tbody tr').each(function () {
                 let arrayValue = parseInt($(this).find('td').eq(6).text(), 10);
 
-                // Check if the array value is a number and not NaN
+                // Check if the arrayValue is a number and not NaN
                 if (!isNaN(arrayValue)) {
-                    // Check if the array value is already added to uniqueValues array
+                    // Check if the arrayValue is already added to uniqueValues array
                     if (!uniqueValues.includes(arrayValue)) {
                         uniqueValues.push(arrayValue);
-                        minimumValues[arrayValue] = [];
-                        minimumValuesSecond[arrayValue] = [];
-                        minimumValuesThird[arrayValue] = [];
+                        combinedValues.push(Array.from(Array(6), () => ({
+                            minimum: Number.MAX_VALUE,
+                            secondMinimum: Number.MAX_VALUE,
+                            thirdMinimum: Number.MAX_VALUE
+                        })));
+                    }
 
-                        // Iterate through each column index (0 to 5)
-                        for (let columnIndex = 0; columnIndex < 6; columnIndex++) {
-                            let cellValue = parseFloat($(this).find('td').eq(columnIndex).text());
+                    // Iterate through each column index (0 to 5)
+                    for (let columnIndex = 0; columnIndex < 6; columnIndex++) {
+                        let cellValue = parseFloat($(this).find('td').eq(columnIndex).text());
 
-                            // Check if the cell value is a number and not NaN, and not equal to zero
-                            if (!isNaN(cellValue) && cellValue !== 0) {
-                                minimumValues[arrayValue].push(cellValue);
-                                minimumValuesSecond[arrayValue].push(cellValue);
-                                minimumValuesThird[arrayValue].push(cellValue);
-                            }
-                        }
-                    } else {
-                        // Iterate through each column index (0 to 5)
-                        for (let columnIndex = 0; columnIndex < 6; columnIndex++) {
-                            let cellValue = parseFloat($(this).find('td').eq(columnIndex).text());
+                        // Check if the cellValue is a number and not NaN, and not equal to zero
+                        if (!isNaN(cellValue) && cellValue !== 0) {
+                            let currentValue = combinedValues[combinedValues.length - 1][columnIndex];
 
-                            // Check if the cell value is a number and not NaN, and not equal to zero
-                            if (!isNaN(cellValue) && cellValue !== 0) {
-                                // Check if the cell value is smaller than the existing minimum value for the same array value and column index
-                                if (cellValue < minimumValues[arrayValue][columnIndex]) {
-                                    minimumValuesThird[arrayValue][columnIndex] = minimumValuesSecond[arrayValue][columnIndex];
-                                    minimumValuesSecond[arrayValue][columnIndex] = minimumValues[arrayValue][columnIndex];
-                                    minimumValues[arrayValue][columnIndex] = cellValue;
-                                } else if (cellValue < minimumValuesSecond[arrayValue][columnIndex] && cellValue !== minimumValues[arrayValue][columnIndex]) {
-                                    minimumValuesThird[arrayValue][columnIndex] = minimumValuesSecond[arrayValue][columnIndex];
-                                    minimumValuesSecond[arrayValue][columnIndex] = cellValue;
-                                } else if (cellValue < minimumValuesThird[arrayValue][columnIndex] && cellValue !== minimumValues[arrayValue][columnIndex] && cellValue !== minimumValuesSecond[arrayValue][columnIndex]) {
-                                    minimumValuesThird[arrayValue][columnIndex] = cellValue;
-                                } else if (minimumValuesThird[arrayValue][columnIndex] === minimumValuesSecond[arrayValue][columnIndex] && minimumValuesSecond[arrayValue][columnIndex] === minimumValues[arrayValue][columnIndex]) {
-                                    // Update the third smallest value if it is the same as the second and first smallest values
-                                    minimumValuesThird[arrayValue][columnIndex] = cellValue;
-                                }
+                            if (cellValue < currentValue.minimum) {
+                                currentValue.thirdMinimum = currentValue.secondMinimum;
+                                currentValue.secondMinimum = currentValue.minimum;
+                                currentValue.minimum = cellValue;
+                            } else if (cellValue < currentValue.secondMinimum && cellValue !== currentValue.minimum) {
+                                currentValue.thirdMinimum = currentValue.secondMinimum;
+                                currentValue.secondMinimum = cellValue;
+                            } else if (cellValue < currentValue.thirdMinimum && cellValue !== currentValue.minimum && cellValue !== currentValue.secondMinimum) {
+                                currentValue.thirdMinimum = cellValue;
                             }
                         }
                     }
@@ -360,63 +346,53 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
             // Reset the background color of all cells to white
             $('#editableTable td').css('background-color', '#ffffff');
 
-            // Output the minimum values for each unique array value
-            for (let value in minimumValues) {
-                for (let columnIndex = 0; columnIndex < 6; columnIndex++) {
-                    let className = `col-${columnIndex}-page-${value}-value-${parseFloat(minimumValues[value][columnIndex]).toFixed(2)}`.replace(/\./g, '-');
+            // Output the minimum values, second smallest values, and third smallest values for each unique arrayValue
+            for (let i = 0; i < uniqueValues.length; i++) {
+                let arrayValue = uniqueValues[i];
 
-                    let elements = document.querySelectorAll('.' + className);
+                for (let columnIndex = 0; columnIndex < 6; columnIndex++) {
+                    let minimum = combinedValues[i][columnIndex].minimum;
+                    let secondMinimum = combinedValues[i][columnIndex].secondMinimum;
+                    let thirdMinimum = combinedValues[i][columnIndex].thirdMinimum;
+
+                    let minimumClassName = `col-${columnIndex}-page-${arrayValue}-value-${minimum.toFixed(2)}`.replace(/\./g, '-');
+                    let secondMinimumClassName = `col-${columnIndex}-page-${arrayValue}-value-${secondMinimum.toFixed(2)}`.replace(/\./g, '-');
+                    let thirdMinimumClassName = `col-${columnIndex}-page-${arrayValue}-value-${thirdMinimum.toFixed(2)}`.replace(/\./g, '-');
+
+                    let minimumElements = document.querySelectorAll('.' + minimumClassName);
+                    let secondMinimumElements = document.querySelectorAll('.' + secondMinimumClassName);
+                    let thirdMinimumElements = document.querySelectorAll('.' + thirdMinimumClassName);
 
                     // Change the background color of the elements
-                    elements.forEach((element) => {
+                    minimumElements.forEach((element) => {
                         element.style.backgroundColor = '#dc3545';
                     });
-                }
-            }
 
-            // Output the second smallest values for each unique array value
-            for (let value in minimumValuesSecond) {
-                for (let columnIndex = 0; columnIndex < 6; columnIndex++) {
-                    let className = `col-${columnIndex}-page-${value}-value-${parseFloat(minimumValuesSecond[value][columnIndex]).toFixed(2)}`.replace(/\./g, '-');
-
-                    let elements = document.querySelectorAll('.' + className);
-
-                    // Change the background color of the elements
-                    elements.forEach((element) => {
+                    secondMinimumElements.forEach((element) => {
                         element.style.backgroundColor = '#198754';
                     });
-                }
-            }
 
-            // Output the third smallest values for each unique array value
-            for (let value in minimumValuesThird) {
-                for (let columnIndex = 0; columnIndex < 6; columnIndex++) {
-                    let className = `col-${columnIndex}-page-${value}-value-${parseFloat(minimumValuesThird[value][columnIndex]).toFixed(2)}`.replace(/\./g, '-');
-
-                    let elements = document.querySelectorAll('.' + className);
-
-                    // Change the background color of the elements
-                    elements.forEach((element) => {
+                    thirdMinimumElements.forEach((element) => {
                         element.style.backgroundColor = '#ffc107';
                     });
                 }
             }
 
-            // Output the minimum values for each unique array value
-            for (let value in minimumValues) {
-                console.log(`Minimum values for ${value}: ${minimumValues[value].join(", ")}`);
-            }
+            // Output the minimum values, second smallest values, and third smallest values for each unique arrayValue
+            for (let i = 0; i < uniqueValues.length; i++) {
+                let arrayValue = uniqueValues[i];
 
-            // Output the second smallest values for each unique array value
-            for (let value in minimumValuesSecond) {
-                console.log(`Second smallest values for ${value}: ${minimumValuesSecond[value].join(", ")}`);
-            }
+                let minimumValues = combinedValues[i].map(value => value.minimum.toFixed(2)).join(", ");
+                let secondMinimumValues = combinedValues[i].map(value => value.secondMinimum.toFixed(2)).join(", ");
+                let thirdMinimumValues = combinedValues[i].map(value => value.thirdMinimum.toFixed(2)).join(", ");
 
-            // Output the third smallest values for each unique array value
-            for (let value in minimumValuesThird) {
-                console.log(`Third smallest values for ${value}: ${minimumValuesThird[value].join(", ")}`);
+                console.log(`Minimum values for ${arrayValue}: ${minimumValues}`);
+                console.log(`Second smallest values for ${arrayValue}: ${secondMinimumValues}`);
+                console.log(`Third smallest values for ${arrayValue}: ${thirdMinimumValues}`);
             }
         }, 1000); // 1000 milliseconds = 1 second
+
+
     });
 
 
