@@ -18,6 +18,15 @@ if(isset($_GET['reset'])){
 <?php
 }
 
+if(isset($_GET['reload'])){
+    ?>
+    <script>
+        alert('Refresh Successful');
+        location.href='index.php';
+    </script>
+<?php
+}
+
 
 // Fetch data from the database
 $query = "SELECT * FROM  page as p,racevalue as r WHERE p.id = r.page_id AND p.date = '$date'";
@@ -57,6 +66,26 @@ if ($action === 'fetch') {
 <head>
     <title>HKJC</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        /* Add this CSS to make the header sticky */
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            background-color: #f9f9f9; /* Optional: Set the background color of the header */
+        }
+
+        /* Add this CSS to remove the transparent border from th elements within the thead */
+        thead th {
+            border: none;
+        }
+
+        /* Optional: Set the height and other styles for the header cells */
+        .sticky-header th {
+            height: 50px;
+            /* Add other styles as needed */
+        }
+    </style>
 </head>
 <body>
 
@@ -140,11 +169,20 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
 
 
 <div class="container mt-4">
-    <div class="text-end mb-5">
-        <a href="index.php?reset=1" class="btn btn-primary btn-lg w-25">Reset</a>
+    <div class="row">
+        <div class="col-6">
+            <div class="mb-5">
+                <a href="index.php?reload=1" class="btn btn-success btn-lg">Refresh Page</a>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="text-end mb-5">
+                <a href="index.php?reset=1" class="btn btn-primary btn-lg">Reset</a>
+            </div>
+        </div>
     </div>
     <table id="editableTable" class="table">
-        <thead>
+        <thead class="sticky-header">
         <tr>
             <th colspan="8"></th>
             <th colspan="2">連贏</th>
@@ -152,12 +190,12 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
             <th colspan="2">連贏及位置Q</th>
         </tr>
         <tr>
-            <th>馬名</th>
             <th>獨贏</th>
             <th>位置</th>
             <th>獨贏</th>
             <th>位置</th>
             <th>獨贏</th>
+            <th>位置</th>
             <th>場次</th>
             <th>馬名</th>
             <th>獨贏</th>
@@ -170,6 +208,7 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
         </thead>
         <tbody>
         <?php
+        $prevPageNo = null;
         foreach ($rows as $row):
 
             $winClass = '';
@@ -199,6 +238,15 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
                 }
             }
 
+            if ($prevPageNo !== null && $prevPageNo !== $row['page_no']) {
+                // Add a blank row when the current page number is different from the previous one
+                ?>
+                <tr>
+                    <td colspan="14" style="height: 100px"> </td>
+                </tr>
+                <?php
+            }
+            $prevPageNo = $row['page_no'];
             ?>
             <tr>
                 <td class="col-0-page-<?php echo $row['page_no']; ?>-value-<?php echo str_replace(".", "-", $row['new_win_1']); ?>" contenteditable="true" data-name="new_win_1" data-id="<?php echo $row['id']; ?>"><?php echo $row['new_win_1']; ?></td>
