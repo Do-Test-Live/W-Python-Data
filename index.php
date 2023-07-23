@@ -7,6 +7,18 @@ date_default_timezone_set("Asia/Hong_Kong");
 
 $date = date('Y-m-d');
 
+if(isset($_GET['reset'])){
+    $query = "UPDATE racevalue SET new_win_1='0', new_place_1='0',new_win_2='0', new_place_2='0',new_win_3='0', new_place_3='0' WHERE date='$date'";
+    $result = $dbController->insertQuery($query);
+    ?>
+    <script>
+        alert('Reset Successful');
+        location.href='index.php';
+    </script>
+<?php
+}
+
+
 // Fetch data from the database
 $query = "SELECT * FROM  page as p,racevalue as r WHERE p.id = r.page_id AND p.date = '$date'";
 //$query = "SELECT * FROM racevalue as r, page as p WHERE p.id = r.page_id AND p.date = '$date' ORDER BY p.page_no ASC";
@@ -28,7 +40,7 @@ if ($action === 'fetch') {
     $newPlace3 = $dbController->checkValue($_POST['new_place_3']);
 
     $query = "UPDATE racevalue SET new_win_1='$newWin1', new_place_1='$newPlace1',new_win_2='$newWin2', new_place_2='$newPlace2',new_win_3='$newWin3', new_place_3='$newPlace3' WHERE id=$id";
-    $result = $dbController->runQuery($query);
+    $result = $dbController->insertQuery($query);
 
     if ($result === TRUE) {
         $response = ['status' => 'success', 'message' => 'Record updated successfully.'];
@@ -128,6 +140,9 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
 
 
 <div class="container mt-4">
+    <div class="text-end mb-5">
+        <a href="index.php?reset=1" class="btn btn-primary btn-lg w-25">Reset</a>
+    </div>
     <table id="editableTable" class="table">
         <thead>
         <tr>
@@ -194,12 +209,12 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
                 <td class="col-5-page-<?php echo $row['page_no']; ?>-value-<?php echo str_replace(".", "-", $row['new_place_3']); ?>" contenteditable="true" data-name="new_place_3" data-id="<?php echo $row['id']; ?>"><?php echo $row['new_place_3']; ?></td>
                 <td><?php echo $row['page_no']; ?></td>
                 <td><?php echo $row['horse_name']; ?></td>
-                <td<?php echo $winClass; ?>><?php echo number_format((float)$row['win'], 1, '.', ''); ?></td>
-                <td<?php echo $placeClass; ?>><?php echo number_format((float)$row['place'], 1, '.', ''); ?></td>
-                <td<?php echo $winClass; ?>><?php echo number_format((float)$row['win'], 1, '.', ''); ?></td>
-                <td<?php echo $placeClass; ?>><?php echo number_format((float)$row['place'], 1, '.', ''); ?></td>
-                <td<?php echo $winClass; ?>><?php echo number_format((float)$row['win'], 1, '.', ''); ?></td>
-                <td<?php echo $placeClass; ?>><?php echo number_format((float)$row['place'], 1, '.', ''); ?></td>
+                <td><?php echo number_format((float)$row['win'], 1, '.', ''); ?></td>
+                <td><?php echo number_format((float)$row['place'], 1, '.', ''); ?></td>
+                <td><?php echo number_format((float)$row['win'], 1, '.', ''); ?></td>
+                <td><?php echo number_format((float)$row['place'], 1, '.', ''); ?></td>
+                <td><?php echo number_format((float)$row['win'], 1, '.', ''); ?></td>
+                <td><?php echo number_format((float)$row['place'], 1, '.', ''); ?></td>
             </tr>
         <?php endforeach; ?>
         </tbody>
@@ -281,16 +296,22 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
                 dataType: 'json',
                 success: function (response) {
                     if (response.status === 'success') {
-                        console.log(response.message);
+                        setInterval(function () {
+                            window.location.href='index.php';
+                        },3000);
                     } else {
-                        console.error(response.message);
+                        setInterval(function () {
+                            window.location.href='index.php';
+                        },3000);
                     }
                 },
                 error: function (xhr, status, error) {
-                    console.error('Ajax request error:', error);
-                    console.log(error);
+                    setInterval(function () {
+                        window.location.href='index.php';
+                    },3000);
                 }
             });
+
         });
 
 
