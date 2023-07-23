@@ -372,13 +372,13 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
                 let arrayValue = uniqueValues[i];
 
                 for (let columnIndex = 0; columnIndex < 6; columnIndex++) {
-                    let minimum = combinedValues[i][columnIndex].minimum;
-                    let secondMinimum = combinedValues[i][columnIndex].secondMinimum;
-                    let thirdMinimum = combinedValues[i][columnIndex].thirdMinimum;
+                    let minimum = combinedValues[i][columnIndex].minimum.toFixed(2);
+                    let secondMinimum = combinedValues[i][columnIndex].secondMinimum.toFixed(2);
+                    let thirdMinimum = combinedValues[i][columnIndex].thirdMinimum.toFixed(2);
 
-                    let minimumClassName = `col-${columnIndex}-page-${arrayValue}-value-${minimum.toFixed(2)}`.replace(/\./g, '-');
-                    let secondMinimumClassName = `col-${columnIndex}-page-${arrayValue}-value-${secondMinimum.toFixed(2)}`.replace(/\./g, '-');
-                    let thirdMinimumClassName = `col-${columnIndex}-page-${arrayValue}-value-${thirdMinimum.toFixed(2)}`.replace(/\./g, '-');
+                    let minimumClassName = `col-${columnIndex}-page-${arrayValue}-value-${minimum.replace(/\./g, '-').replace(/\+/g, '')}`;
+                    let secondMinimumClassName = `col-${columnIndex}-page-${arrayValue}-value-${secondMinimum.replace(/\./g, '-').replace(/\+/g, '')}`;
+                    let thirdMinimumClassName = `col-${columnIndex}-page-${arrayValue}-value-${thirdMinimum.replace(/\./g, '-').replace(/\+/g, '')}`;
 
                     let minimumElements = document.querySelectorAll('.' + minimumClassName);
                     let secondMinimumElements = document.querySelectorAll('.' + secondMinimumClassName);
@@ -412,8 +412,6 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
                 console.log(`Third smallest values for ${arrayValue}: ${thirdMinimumValues}`);
             }
         }, 1000); // 1000 milliseconds = 1 second
-
-
     });
 
 
