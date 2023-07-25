@@ -7,24 +7,24 @@ date_default_timezone_set("Asia/Hong_Kong");
 
 $date = date('Y-m-d');
 
-if(isset($_GET['reset'])){
+if (isset($_GET['reset'])) {
     $query = "UPDATE racevalue SET new_win_1='0', new_place_1='0',new_win_2='0', new_place_2='0',new_win_3='0', new_place_3='0' WHERE date='$date'";
     $result = $dbController->insertQuery($query);
     ?>
     <script>
         alert('Reset Successful');
-        location.href='index.php';
+        location.href = 'index.php';
     </script>
-<?php
+    <?php
 }
 
-if(isset($_GET['reload'])){
+if (isset($_GET['reload'])) {
     ?>
     <script>
         alert('Refresh Successful');
-        location.href='index.php';
+        location.href = 'index.php';
     </script>
-<?php
+    <?php
 }
 
 
@@ -184,31 +184,28 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
     <table id="editableTable" class="table">
         <thead class="sticky-header">
         <tr>
-            <th colspan="8"></th>
-            <th colspan="2">連贏</th>
-            <th colspan="2">位置Q</th>
-            <th colspan="2">連贏及位置Q</th>
-        </tr>
-        <tr>
-            <th>獨贏</th>
-            <th>位置</th>
-            <th>獨贏</th>
-            <th>位置</th>
-            <th>獨贏</th>
-            <th>位置</th>
             <th>場次</th>
+            <th>馬號</th>
             <th>馬名</th>
+
             <th>獨贏</th>
             <th>位置</th>
+
             <th>獨贏</th>
             <th>位置</th>
+
             <th>獨贏</th>
             <th>位置</th>
+
+            <th class="bg-light">獨贏</th>
+            <th class="bg-light">位置</th>
         </tr>
         </thead>
         <tbody>
         <?php
         $prevPageNo = null;
+        $k = 0;
+
         foreach ($rows as $row):
 
             $winClass = '';
@@ -240,29 +237,41 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
 
             if ($prevPageNo !== null && $prevPageNo !== $row['page_no']) {
                 // Add a blank row when the current page number is different from the previous one
+                $k = 0;
                 ?>
                 <tr>
-                    <td colspan="14" style="height: 100px"> </td>
+                    <td colspan="14" style="height: 100px"></td>
                 </tr>
                 <?php
             }
+
+            $k += 1;
             $prevPageNo = $row['page_no'];
             ?>
             <tr>
-                <td class="col-0-page-<?php echo $row['page_no']; ?>-value-<?php echo str_replace(".", "-", $row['new_win_1']); ?>" contenteditable="true" data-name="new_win_1" data-id="<?php echo $row['id']; ?>"><?php echo $row['new_win_1']; ?></td>
-                <td class="col-1-page-<?php echo $row['page_no']; ?>-value-<?php echo str_replace(".", "-", $row['new_place_1']); ?>" contenteditable="true" data-name="new_place_1" data-id="<?php echo $row['id']; ?>"><?php echo $row['new_place_1']; ?></td>
-                <td class="col-2-page-<?php echo $row['page_no']; ?>-value-<?php echo str_replace(".", "-", $row['new_win_2']); ?>" contenteditable="true" data-name="new_win_2" data-id="<?php echo $row['id']; ?>"><?php echo $row['new_win_2']; ?></td>
-                <td class="col-3-page-<?php echo $row['page_no']; ?>-value-<?php echo str_replace(".", "-", $row['new_place_2']); ?>" contenteditable="true" data-name="new_place_2" data-id="<?php echo $row['id']; ?>"><?php echo $row['new_place_2']; ?></td>
-                <td class="col-4-page-<?php echo $row['page_no']; ?>-value-<?php echo str_replace(".", "-", $row['new_win_3']); ?>" contenteditable="true" data-name="new_win_3" data-id="<?php echo $row['id']; ?>"><?php echo $row['new_win_3']; ?></td>
-                <td class="col-5-page-<?php echo $row['page_no']; ?>-value-<?php echo str_replace(".", "-", $row['new_place_3']); ?>" contenteditable="true" data-name="new_place_3" data-id="<?php echo $row['id']; ?>"><?php echo $row['new_place_3']; ?></td>
                 <td><?php echo $row['page_no']; ?></td>
+                <td><?php echo $k; ?></td>
                 <td><?php echo $row['horse_name']; ?></td>
-                <td><?php echo number_format((float)$row['win'], 1, '.', ''); ?></td>
-                <td><?php echo number_format((float)$row['place'], 1, '.', ''); ?></td>
-                <td><?php echo number_format((float)$row['win'], 1, '.', ''); ?></td>
-                <td><?php echo number_format((float)$row['place'], 1, '.', ''); ?></td>
-                <td><?php echo number_format((float)$row['win'], 1, '.', ''); ?></td>
-                <td><?php echo number_format((float)$row['place'], 1, '.', ''); ?></td>
+                <td class="col-3-page-<?php echo $row['page_no']; ?>-value-<?php echo str_replace(".", "-", $row['new_win_1']); ?>"
+                    contenteditable="true" data-name="new_win_1"
+                    data-id="<?php echo $row['id']; ?>"><?php echo $row['new_win_1']; ?></td>
+                <td class="col-4-page-<?php echo $row['page_no']; ?>-value-<?php echo str_replace(".", "-", $row['new_place_1']); ?>"
+                    contenteditable="true" data-name="new_place_1"
+                    data-id="<?php echo $row['id']; ?>"><?php echo $row['new_place_1']; ?></td>
+                <td class="col-5-page-<?php echo $row['page_no']; ?>-value-<?php echo str_replace(".", "-", $row['new_win_2']); ?>"
+                    contenteditable="true" data-name="new_win_2"
+                    data-id="<?php echo $row['id']; ?>"><?php echo $row['new_win_2']; ?></td>
+                <td class="col-6-page-<?php echo $row['page_no']; ?>-value-<?php echo str_replace(".", "-", $row['new_place_2']); ?>"
+                    contenteditable="true" data-name="new_place_2"
+                    data-id="<?php echo $row['id']; ?>"><?php echo $row['new_place_2']; ?></td>
+                <td class="col-7-page-<?php echo $row['page_no']; ?>-value-<?php echo str_replace(".", "-", $row['new_win_3']); ?>"
+                    contenteditable="true" data-name="new_win_3"
+                    data-id="<?php echo $row['id']; ?>"><?php echo $row['new_win_3']; ?></td>
+                <td class="col-8-page-<?php echo $row['page_no']; ?>-value-<?php echo str_replace(".", "-", $row['new_place_3']); ?>"
+                    contenteditable="true" data-name="new_place_3"
+                    data-id="<?php echo $row['id']; ?>"><?php echo $row['new_place_3']; ?></td>
+                <td class="bg-light"><?php echo number_format((float) $row['win'], 1, '.', ''); ?></td>
+                <td class="bg-light"><?php echo number_format((float) $row['place'], 1, '.', ''); ?></td>
             </tr>
         <?php endforeach; ?>
         </tbody>
@@ -276,10 +285,13 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
     $(document).ready(function () {
         // Fetch data and populate the table on page load
         function loadTableData() {
+            let prevPageNo = '';
+            let k = 0;
+
             $.ajax({
                 url: 'index.php',
                 type: 'POST',
-                data: {action: 'fetch'},
+                data: { action: 'fetch' },
                 dataType: 'json',
                 success: function (response) {
                     if (response.status == 'success') {
@@ -287,19 +299,25 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
                         let html = '';
 
                         for (let i = 0; i < rows.length; i++) {
+                            let currentPageNo = rows[i].page_no;
+
+                            if (currentPageNo !== prevPageNo) {
+                                k = 1; // Reset k to 1 for a new page_no
+                                prevPageNo = currentPageNo;
+                            } else {
+                                k++; // Increment k for the same page_no
+                            }
+
                             html += '<tr>';
+                            html += '<td>' + currentPageNo + '</td>';
+                            html += '<td>' + k + '</td>';
+                            html += '<td>' + rows[i].horse_name + '</td>';
                             html += '<td contenteditable="true" data-name="new_win_1" data-id="' + rows[i].id + '">' + rows[i].new_win_1 + '</td>';
                             html += '<td contenteditable="true" data-name="new_place_1" data-id="' + rows[i].id + '">' + rows[i].new_place_1 + '</td>';
                             html += '<td contenteditable="true" data-name="new_win_2" data-id="' + rows[i].id + '">' + rows[i].new_win_2 + '</td>';
                             html += '<td contenteditable="true" data-name="new_place_2" data-id="' + rows[i].id + '">' + rows[i].new_place_2 + '</td>';
                             html += '<td contenteditable="true" data-name="new_win_3" data-id="' + rows[i].id + '">' + rows[i].new_win_3 + '</td>';
                             html += '<td contenteditable="true" data-name="new_place_3" data-id="' + rows[i].id + '">' + rows[i].new_place_3 + '</td>';
-                            html += '<td>' + rows[i].page_no + '</td>';
-                            html += '<td>' + rows[i].horse_name + '</td>';
-                            html += '<td>' + rows[i].win + '</td>';
-                            html += '<td>' + rows[i].place + '</td>';
-                            html += '<td>' + rows[i].win + '</td>';
-                            html += '<td>' + rows[i].place + '</td>';
                             html += '<td>' + rows[i].win + '</td>';
                             html += '<td>' + rows[i].place + '</td>';
                             html += '</tr>';
@@ -311,7 +329,11 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
                     }
                 },
             });
+
+            console.log('Reload Page');
         }
+
+        setInterval(loadTableData, 5000);
 
         // Update the row data using Ajax on input change
         $(document).on('input', '[data-name="new_win_1"], [data-name="new_place_1"], [data-name="new_win_2"], [data-name="new_place_2"], [data-name="new_win_3"], [data-name="new_place_3"]', function () {
@@ -345,18 +367,18 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
                 success: function (response) {
                     if (response.status === 'success') {
                         setInterval(function () {
-                            window.location.href='index.php';
-                        },3000);
+                            window.location.href = 'index.php';
+                        }, 3000);
                     } else {
                         setInterval(function () {
-                            window.location.href='index.php';
-                        },3000);
+                            window.location.href = 'index.php';
+                        }, 3000);
                     }
                 },
                 error: function (xhr, status, error) {
                     setInterval(function () {
-                        window.location.href='index.php';
-                    },3000);
+                        window.location.href = 'index.php';
+                    }, 3000);
                 }
             });
 
@@ -375,7 +397,7 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
 
             // Iterate through each row in the table body
             $('#editableTable tbody tr').each(function () {
-                let arrayValue = parseInt($(this).find('td').eq(6).text(), 10);
+                let arrayValue = parseInt($(this).find('td').eq(0).text(), 10);
 
                 // Check if the arrayValue is a number and not NaN
                 if (!isNaN(arrayValue)) {
@@ -389,13 +411,13 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
                         })));
                     }
 
-                    // Iterate through each column index (0 to 5)
-                    for (let columnIndex = 0; columnIndex < 6; columnIndex++) {
+                    // Iterate through each column index (3 to 8)
+                    for (let columnIndex = 3; columnIndex < 9; columnIndex++) {
                         let cellValue = parseFloat($(this).find('td').eq(columnIndex).text());
 
                         // Check if the cellValue is a number and not NaN, and not equal to zero
                         if (!isNaN(cellValue) && cellValue !== 0) {
-                            let currentValue = combinedValues[combinedValues.length - 1][columnIndex];
+                            let currentValue = combinedValues[combinedValues.length - 1][columnIndex - 3];
 
                             if (cellValue < currentValue.minimum) {
                                 currentValue.thirdMinimum = currentValue.secondMinimum;
@@ -419,10 +441,10 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
             for (let i = 0; i < uniqueValues.length; i++) {
                 let arrayValue = uniqueValues[i];
 
-                for (let columnIndex = 0; columnIndex < 6; columnIndex++) {
-                    let minimum = combinedValues[i][columnIndex].minimum.toFixed(2);
-                    let secondMinimum = combinedValues[i][columnIndex].secondMinimum.toFixed(2);
-                    let thirdMinimum = combinedValues[i][columnIndex].thirdMinimum.toFixed(2);
+                for (let columnIndex = 3; columnIndex < 9; columnIndex++) {
+                    let minimum = combinedValues[i][columnIndex - 3].minimum.toFixed(2);
+                    let secondMinimum = combinedValues[i][columnIndex - 3].secondMinimum.toFixed(2);
+                    let thirdMinimum = combinedValues[i][columnIndex - 3].thirdMinimum.toFixed(2);
 
                     let minimumClassName = `col-${columnIndex}-page-${arrayValue}-value-${minimum.replace(/\./g, '-').replace(/\+/g, '')}`;
                     let secondMinimumClassName = `col-${columnIndex}-page-${arrayValue}-value-${secondMinimum.replace(/\./g, '-').replace(/\+/g, '')}`;
@@ -454,14 +476,9 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
                 let minimumValues = combinedValues[i].map(value => value.minimum.toFixed(2)).join(", ");
                 let secondMinimumValues = combinedValues[i].map(value => value.secondMinimum.toFixed(2)).join(", ");
                 let thirdMinimumValues = combinedValues[i].map(value => value.thirdMinimum.toFixed(2)).join(", ");
-
-                console.log(`Minimum values for ${arrayValue}: ${minimumValues}`);
-                console.log(`Second smallest values for ${arrayValue}: ${secondMinimumValues}`);
-                console.log(`Third smallest values for ${arrayValue}: ${thirdMinimumValues}`);
             }
         }, 1000); // 1000 milliseconds = 1 second
     });
-
 
 
 
