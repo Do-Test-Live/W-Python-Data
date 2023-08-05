@@ -199,6 +199,11 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
 
             <th class="bg-light">獨贏</th>
             <th class="bg-light">位置</th>
+            <th colspan="2"></th>
+            <th>(1 vs 3)</th>
+            <th>(2 vs 4)</th>
+            <th>(3 vs 5)</th>
+            <th>(4 vs 6)</th>
         </tr>
         </thead>
         <tbody>
@@ -270,8 +275,33 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
                 <td class="col-8-page-<?php echo $row['page_no']; ?>-value-<?php echo str_replace(".", "-", $row['new_place_3']); ?>"
                     contenteditable="true" data-name="new_place_3"
                     data-id="<?php echo $row['id']; ?>"><?php echo $row['new_place_3']; ?></td>
-                <td class="bg-light"><?php echo number_format((float) $row['win'], 1, '.', ''); ?></td>
-                <td class="bg-light"><?php echo number_format((float) $row['place'], 1, '.', ''); ?></td>
+                <td class="bg-light"><?php echo number_format((float)$row['win'], 1, '.', ''); ?></td>
+                <td class="bg-light"><?php echo number_format((float)$row['place'], 1, '.', ''); ?></td>
+                <td colspan="2"></td>
+                <?php
+                $value_1 = (float)$row['new_win_2'] - (float)$row['new_win_1'];
+                ?>
+                <td<?php if($value_1<0) echo " class='text-danger'"; ?>>
+                    <?php echo number_format($value_1, 1, '.', ''); ?>
+                </td>
+                <?php
+                $value_2 = (float)$row['new_place_2'] - (float)$row['new_place_1'];
+                ?>
+                <td<?php if($value_2<0) echo " class='text-danger'"; ?>>
+                    <?php echo number_format($value_2, 1, '.', ''); ?>
+                </td>
+                <?php
+                $value_3 = (float)$row['new_win_3'] - (float)$row['new_win_2'];
+                ?>
+                <td<?php if($value_3<0) echo " class='text-danger'"; ?>>
+                    <?php echo number_format($value_3, 1, '.', ''); ?>
+                </td>
+                <?php
+                $value_4 = (float)$row['new_place_3'] - (float)$row['new_place_2'];
+                ?>
+                <td<?php if($value_4<0) echo " class='text-danger'"; ?>>
+                    <?php echo number_format($value_4, 1, '.', ''); ?>
+                </td>
             </tr>
         <?php endforeach; ?>
         </tbody>
@@ -291,7 +321,7 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
             $.ajax({
                 url: 'index.php',
                 type: 'POST',
-                data: { action: 'fetch' },
+                data: {action: 'fetch'},
                 dataType: 'json',
                 success: function (response) {
                     if (response.status == 'success') {
@@ -481,8 +511,6 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
     });
 
 
-
 </script>
-
 </body>
 </html>
