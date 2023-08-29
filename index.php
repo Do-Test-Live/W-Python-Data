@@ -275,8 +275,8 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
                 <td class="col-8-page-<?php echo $row['page_no']; ?>-value-<?php echo str_replace(".", "-", $row['new_place_3']); ?>"
                     contenteditable="true" data-name="new_place_3"
                     data-id="<?php echo $row['id']; ?>"><?php echo $row['new_place_3']; ?></td>
-                <td class="bg-light"><?php echo number_format((float)$row['win'], 1, '.', ''); ?></td>
-                <td class="bg-light"><?php echo number_format((float)$row['place'], 1, '.', ''); ?></td>
+                <td class="bg-light"<?php if($row['win']<$row['new_win_3']) echo " style='background-color:#b88bff !important;'"; ?>><?php echo number_format((float)$row['win'], 1, '.', ''); ?></td>
+                <td class="bg-light"<?php if($row['place']<$row['new_place_3']) echo " style='background-color:#b88bff !important;'"; ?>><?php echo number_format((float)$row['place'], 1, '.', ''); ?></td>
                 <td colspan="2"></td>
                 <?php
                 $value_1 = (float)$row['new_win_2'] - (float)$row['new_win_1'];
@@ -465,7 +465,19 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
             });
 
             // Reset the background color of all cells to white
-            $('#editableTable td').css('background-color', '#ffffff');
+            $('#editableTable td[0]').css('background-color', '#ffffff');
+            $('#editableTable td[1]').css('background-color', '#ffffff');
+            $('#editableTable td[2]').css('background-color', '#ffffff');
+            $('#editableTable td[3]').css('background-color', '#ffffff');
+            $('#editableTable td[4]').css('background-color', '#ffffff');
+            $('#editableTable td[5]').css('background-color', '#ffffff');
+            $('#editableTable td[6]').css('background-color', '#ffffff');
+            $('#editableTable td[7]').css('background-color', '#ffffff');
+            $('#editableTable td[8]').css('background-color', '#ffffff');
+            $('#editableTable td[11]').css('background-color', '#ffffff');
+            $('#editableTable td[12]').css('background-color', '#ffffff');
+            $('#editableTable td[13]').css('background-color', '#ffffff');
+            $('#editableTable td[14]').css('background-color', '#ffffff');
 
             // Output the minimum values, second smallest values, and third smallest values for each unique arrayValue
             for (let i = 0; i < uniqueValues.length; i++) {
