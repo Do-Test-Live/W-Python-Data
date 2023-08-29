@@ -484,9 +484,9 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
                 let arrayValue = uniqueValues[i];
 
                 for (let columnIndex = 3; columnIndex < 9; columnIndex++) {
-                    let minimum = combinedValues[i][columnIndex - 3].minimum.toFixed(2);
-                    let secondMinimum = combinedValues[i][columnIndex - 3].secondMinimum.toFixed(2);
-                    let thirdMinimum = combinedValues[i][columnIndex - 3].thirdMinimum.toFixed(2);
+                    let minimum = combinedValues[i][columnIndex - 3].minimum.toFixed(1);
+                    let secondMinimum = combinedValues[i][columnIndex - 3].secondMinimum.toFixed(1);
+                    let thirdMinimum = combinedValues[i][columnIndex - 3].thirdMinimum.toFixed(1);
 
                     let minimumClassName = `col-${columnIndex}-page-${arrayValue}-value-${minimum.replace(/\./g, '-').replace(/\+/g, '')}`;
                     let secondMinimumClassName = `col-${columnIndex}-page-${arrayValue}-value-${secondMinimum.replace(/\./g, '-').replace(/\+/g, '')}`;
@@ -515,9 +515,9 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
             for (let i = 0; i < uniqueValues.length; i++) {
                 let arrayValue = uniqueValues[i];
 
-                let minimumValues = combinedValues[i].map(value => value.minimum.toFixed(2)).join(", ");
-                let secondMinimumValues = combinedValues[i].map(value => value.secondMinimum.toFixed(2)).join(", ");
-                let thirdMinimumValues = combinedValues[i].map(value => value.thirdMinimum.toFixed(2)).join(", ");
+                let minimumValues = combinedValues[i].map(value => value.minimum.toFixed(1)).join(", ");
+                let secondMinimumValues = combinedValues[i].map(value => value.secondMinimum.toFixed(1)).join(", ");
+                let thirdMinimumValues = combinedValues[i].map(value => value.thirdMinimum.toFixed(1)).join(", ");
             }
         }, 1000); // 1000 milliseconds = 1 second
     });
