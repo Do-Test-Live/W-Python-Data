@@ -1,5 +1,8 @@
 <?php
 require_once 'include/dbController.php';
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 
 // Create an instance of DBController
 $dbController = new DBController();
@@ -309,61 +312,70 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
 </div>
 
 
-<script src="assets/vendor/jQuery/jquery-3.6.4.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script>
-    $(document).ready(function () {
-        // Fetch data and populate the table on page load
-        function loadTableData() {
-            let prevPageNo = '';
-            let k = 0;
 
-            $.ajax({
-                url: 'index.php',
-                type: 'POST',
-                data: {action: 'fetch'},
-                dataType: 'json',
-                success: function (response) {
-                    if (response.status == 'success') {
-                        let rows = response.data;
-                        let html = '';
+    function loadTableData() {
+        let prevPageNo=1;
+        let html='';
+        console.log('Fetching table data...');
+        $.ajax({
+            url: 'pageReload.php',
+            type: 'POST',
+            data: { action: 'fetch' },
+            dataType: 'json',
+            success: function (response) {
+                if (response.status === 'success') {
+                    for (let i = 0; i < response.data.length; i++) {
+                        let currentPageNo = response.data[i].page_no;
 
-                        for (let i = 0; i < rows.length; i++) {
-                            let currentPageNo = rows[i].page_no;
-
-                            if (currentPageNo !== prevPageNo) {
-                                k = 1; // Reset k to 1 for a new page_no
-                                prevPageNo = currentPageNo;
-                            } else {
-                                k++; // Increment k for the same page_no
+                        if (currentPageNo !== prevPageNo) {
+                            k = 1; // Reset k to 1 for a new page_no
+                            if(i!=0){
+                                html += '<tr style="height: 100px"></tr>';
                             }
-
-                            html += '<tr>';
-                            html += '<td>' + currentPageNo + '</td>';
-                            html += '<td>' + k + '</td>';
-                            html += '<td>' + rows[i].horse_name + '</td>';
-                            html += '<td contenteditable="true" data-name="new_win_1" data-id="' + rows[i].id + '">' + rows[i].new_win_1 + '</td>';
-                            html += '<td contenteditable="true" data-name="new_place_1" data-id="' + rows[i].id + '">' + rows[i].new_place_1 + '</td>';
-                            html += '<td contenteditable="true" data-name="new_win_2" data-id="' + rows[i].id + '">' + rows[i].new_win_2 + '</td>';
-                            html += '<td contenteditable="true" data-name="new_place_2" data-id="' + rows[i].id + '">' + rows[i].new_place_2 + '</td>';
-                            html += '<td contenteditable="true" data-name="new_win_3" data-id="' + rows[i].id + '">' + rows[i].new_win_3 + '</td>';
-                            html += '<td contenteditable="true" data-name="new_place_3" data-id="' + rows[i].id + '">' + rows[i].new_place_3 + '</td>';
-                            html += '<td>' + rows[i].win + '</td>';
-                            html += '<td>' + rows[i].place + '</td>';
-                            html += '</tr>';
+                            prevPageNo = currentPageNo;
+                        } else {
+                            k++; // Increment k for the same page_no
                         }
 
-                        $('#editableTable tbody').html(html);
-                    } else {
-                        console.error(response.message);
+                        html += '<tr>';
+                        html += '<td>' + currentPageNo + '</td>';
+                        html += '<td>' + k + '</td>';
+                        html += '<td>' + response.data[i].horse_name + '</td>';
+                        html += '<td contenteditable="true" data-name="new_win_1" data-id="' + response.data[i].id + '" class="col-3-page-' + response.data[i].page_no + '-value-' + response.data[i].new_win_1.replace(/\./g, '-') + '">' + response.data[i].new_win_1 + '</td>';
+                        html += '<td contenteditable="true" data-name="new_place_1" data-id="' + response.data[i].id + '" class="col-4-page-' + response.data[i].page_no + '-value-' + response.data[i].new_place_1.replace(/\./g, '-') + '">' + response.data[i].new_place_1 + '</td>';
+                        html += '<td contenteditable="true" data-name="new_win_2" data-id="' + response.data[i].id + '" class="col-5-page-' + response.data[i].page_no + '-value-' + response.data[i].new_win_2.replace(/\./g, '-') + '">' + response.data[i].new_win_2 + '</td>';
+                        html += '<td contenteditable="true" data-name="new_place_2" data-id="' + response.data[i].id + '" class="col-6-page-' + response.data[i].page_no + '-value-' + response.data[i].new_place_2.replace(/\./g, '-') + '">' + response.data[i].new_place_2 + '</td>';
+                        html += '<td contenteditable="true" data-name="new_win_3" data-id="' + response.data[i].id + '" class="col-7-page-' + response.data[i].page_no + '-value-' + response.data[i].new_win_3.replace(/\./g, '-') + '">' + response.data[i].new_win_3 + '</td>';
+                        html += '<td contenteditable="true" data-name="new_place_3" data-id="' + response.data[i].id + '" class="col-8-page-' + response.data[i].page_no + '-value-' + response.data[i].new_place_3.replace(/\./g, '-') + '">' + response.data[i].new_place_3 + '</td>';
+                        html += '<td style="background-color:' + (parseFloat(response.data[i].win) < parseFloat(response.data[i].new_win_3) ? '#b88bff' : '#f8f9fa') + ';">' + (parseFloat(response.data[i].win).toFixed(1)) + '</td>';
+                        html += '<td style="background-color:' + (parseFloat(response.data[i].place) < parseFloat(response.data[i].new_place_3) ? '#b88bff' : '#f8f9fa') + ';">' + (parseFloat(response.data[i].place).toFixed(1)) + '</td>';
+                        html += '<td colspan="2"></td>';
+                        html += '<td' + (response.data[i].new_win_2 - response.data[i].new_win_1 < 0 ? ' class="text-danger"' : '') + '>' + (parseFloat(response.data[i].new_win_2 - response.data[i].new_win_1).toFixed(1)) + '</td>';
+                        html += '<td' + (response.data[i].new_place_2 - response.data[i].new_place_1 < 0 ? ' class="text-danger"' : '') + '>' + (parseFloat(response.data[i].new_place_2 - response.data[i].new_place_1).toFixed(1)) + '</td>';
+                        html += '<td' + (response.data[i].new_win_3 - response.data[i].new_win_2 < 0 ? ' class="text-danger"' : '') + '>' + (parseFloat(response.data[i].new_win_3 - response.data[i].new_win_2).toFixed(1)) + '</td>';
+                        html += '<td' + (response.data[i].new_place_3 - response.data[i].new_place_2 < 0 ? ' class="text-danger"' : '') + '>' + (parseFloat(response.data[i].new_place_3 - response.data[i].new_place_2).toFixed(1)) + '</td>';
+                        html += '</tr>';
                     }
-                },
-            });
 
-            console.log('Reload Page');
-        }
+                    $('#editableTable tbody').html(html);
 
-        setInterval(loadTableData, 5000);
+                    console.log('Value Update');
+                } else {
+                    console.error(response.message);
+                }
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        // Load table data on page load
+        loadTableData();
+
+        // Refresh the data every second
+        setInterval(loadTableData, 10000);
 
         // Update the row data using Ajax on input change
         $(document).on('input', '[data-name="new_win_1"], [data-name="new_place_1"], [data-name="new_win_2"], [data-name="new_place_2"], [data-name="new_win_3"], [data-name="new_place_3"]', function () {
@@ -414,13 +426,6 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
 
         });
 
-
-        // Load table data on page load
-        loadTableData();
-    });
-
-
-    $(document).ready(function () {
         setInterval(function () {
             let uniqueValues = [];
             let combinedValues = [];
