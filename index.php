@@ -315,6 +315,17 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script>
+    // Variable to store the scroll position
+    let scrollPosition = 0;
+
+    // Function to reload the page and maintain scroll position
+    function reloadPage() {
+        // Store the current scroll position
+        scrollPosition = window.scrollY;
+
+        // Reload the page
+        location.href = 'index.php';
+    }
 
     function loadTableData() {
         let prevPageNo=1;
@@ -409,22 +420,24 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
                 success: function (response) {
                     if (response.status === 'success') {
                         setInterval(function () {
-                            window.location.href = 'index.php';
+                            reloadPage;
                         }, 3000);
                     } else {
                         setInterval(function () {
-                            window.location.href = 'index.php';
+                            reloadPage;
                         }, 3000);
                     }
                 },
                 error: function (xhr, status, error) {
                     setInterval(function () {
-                        window.location.href = 'index.php';
+                        reloadPage;
                     }, 3000);
                 }
             });
 
         });
+
+
 
         setInterval(function () {
             let uniqueValues = [];
@@ -525,7 +538,13 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
                 let thirdMinimumValues = combinedValues[i].map(value => value.thirdMinimum.toFixed(1)).join(", ");
             }
         }, 1000); // 1000 milliseconds = 1 second
+        scrollToStoredPosition();
     });
+
+    // Function to scroll back to the stored position after page reload
+    function scrollToStoredPosition() {
+        window.scrollTo(0, scrollPosition);
+    }
 
     $(document).on('click', '[contenteditable="true"]', function () {
         $(this).text('');
