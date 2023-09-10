@@ -522,7 +522,9 @@ foreach ($smallestValuesPlace as $pageNumber => &$values) {
         }, 1000); // 1000 milliseconds = 1 second
     });
 
-
+    $(document).on('click', '[contenteditable="true"]', function () {
+        $(this).text('');
+    });
 </script>
 </body>
 </html>
